@@ -8,20 +8,13 @@ import java.util.List;
  * @author bd17kaka
  */
 public interface RedisDao {
-
 	
 	/**
-	 * 将指定类型的索引存储到redis
-	 * @param map
-	 */
-	void insert(List<String> indexs, String redisKey);
-	
-	/**
-	 * 获取某个key出现的次数
+	 * 获取值
 	 * @param key
 	 * @return
 	 */
-	int getNum(String redisKey, String field);
+	int hget(String redisKey, String field);
 	
 	/**
 	 * 设置值
