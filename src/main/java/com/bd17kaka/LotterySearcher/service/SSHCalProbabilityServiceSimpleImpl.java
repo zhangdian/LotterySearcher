@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bd17kaka.LotterySearcher.constat.SSH;
 import com.bd17kaka.LotterySearcher.dao.RedisDao;
 
-@Service(value = "sshCalProbabilityService")
+@Service(value = "sshCalProbabilityServiceSimpleImpl")
 public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityService {
 
 	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleImpl.class);

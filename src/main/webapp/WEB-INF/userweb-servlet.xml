@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<context:component-scan base-package="com.bd17kaka.kankantu.controller" />
+	<context:component-scan base-package="com.bd17kaka.kankantu.service" />
+	<context:component-scan base-package="com.bd17kaka.kankantu.dao" />
+
+	<!-- 拦截器配置 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
+		<property name="interceptors"> <list> <ref bean="identityInterceptor" /> 
+		</list> </property> </bean> -->
+		
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+
+	<!-- 主要支持jsp和jstl的视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!--异常拦截配置
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultStatusCode" value="200"></property>
+		<property name="defaultErrorView" value="message_error"></property>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.RuntimeException">error</prop>
+				<prop key="java.sql.SQLException">error</prop>
+				<prop key="java.net.SocketTimeoutException">error</prop>
+				<prop key="java.net.ConnectException">error</prop>
+				<prop key="java.util.NoSuchElementException">error</prop>
+				<prop key="java.lang.Exception">error</prop>
+			</props>
+		</property>
+	</bean>
+	 -->
+
+</beans>
