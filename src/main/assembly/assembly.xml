@@ -8,18 +8,18 @@
 	<fileSets>
 		<fileSet>
 			<directory>src/main/assembly/shell</directory>
-			<outputDirectory>LotteryIndexer/shell</outputDirectory>
+			<outputDirectory>LotterySearcher/shell</outputDirectory>
 			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/assembly/conf</directory>
-			<outputDirectory>LotteryIndexer/conf</outputDirectory>
+			<outputDirectory>LotterySearcher/conf</outputDirectory>
 			<fileMode>0644</fileMode>
 		</fileSet>
 	</fileSets>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>LotteryIndexer/lib</outputDirectory>
+			<outputDirectory>LotterySearcher/lib</outputDirectory>
 		</dependencySet>
 	</dependencySets>
 </assembly>
