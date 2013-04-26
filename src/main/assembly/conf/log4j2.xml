@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="info" name="ssh_file2db_sync" packages="">
+<configuration status="info" name="lottery_searcher" packages="">
 	<appenders>
-<!-- 		<Console name="STDOUT" target="SYSTEM_OUT">
+		<Console name="STDOUT" target="SYSTEM_OUT">
 			<PatternLayout>
 				<pattern> %d{MM-dd HH:mm:ss,SSS}:%p %t %c - %m%n</pattern>
 			</PatternLayout>
-		</Console> -->
+		</Console>
 
-		<RollingFile name="ROLL-FILE" fileName="../logs/app_ssh_file2db_sync.log"
-			filePattern="../logs/app_ssh_file2db_sync-%d{yyyy-MM-dd}.log">
+		<RollingFile name="ROLL-FILE" fileName="../logs/app_lottery_searcher.log"
+			filePattern="../logs/app_lottery_searcher-%d{yyyy-MM-dd}.log">
 			<PatternLayout>
 				<pattern>%d{MM-dd HH:mm:ss,SSS}:%p %t %c - %m%n</pattern>
 			</PatternLayout>
@@ -26,7 +26,7 @@
 
 	<loggers>
 		<root level="INFO">
-	<!-- <appender-ref ref="STDOUT" /> -->
+			<appender-ref ref="STDOUT" />
 			<appender-ref ref="ROLL-FILE" />
 			<!-- <appender-ref ref="SYSLOG"/> -->
 		</root>

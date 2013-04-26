@@ -10,7 +10,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  * 重写 ContextLoaderListener，把 ApplicationContext 设置到 SpringContextUtil
  * 以方便使用
- * @author tendy
+ * @author zhangdian
  *
  */
 public class LotterySearcherContextListener extends ContextLoaderListener {

@@ -42,6 +42,11 @@ public class BaseController {
 		write("text/html; charset=UTF-8",req,resp,msg);
 	}
 	
+	protected void writePlain(HttpServletRequest req, HttpServletResponse resp,String msg)throws ServletException, IOException 
+	{
+		write("text/plain; charset=UTF-8",req,resp,msg);
+	}
+	
 	protected void writeJavaScript(HttpServletRequest req, HttpServletResponse resp,String msg)throws ServletException, IOException 
 	{
 		write("application/x-javascript; charset=\"UTF-8\"",req,resp,msg);

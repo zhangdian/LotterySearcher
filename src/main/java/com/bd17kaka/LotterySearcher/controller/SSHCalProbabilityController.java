@@ -34,15 +34,16 @@ public class SSHCalProbabilityController extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("/sshCalRedProbability.do")
-	public String sshCalRedProbability(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+	public void sshCalRedProbability(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		
 		String input = StringUtils.trimToEmpty(request.getParameter("input"));
 		if (StringUtils.isEmpty(input)) {
-			return "输入有错，请检查输入";
+			writePlain(request, response, "输入有误");
+			return;
 		}
 		
 		double fm = sshCalProbabilityService.calRedProbability(input);
-		return String.valueOf(fm);
+		writePlain(request, response, String.valueOf(fm));
 	}
 	
 }

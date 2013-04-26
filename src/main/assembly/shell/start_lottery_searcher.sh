@@ -2,7 +2,7 @@
 
 DEPLOY_HOME=`echo $(dirname $(pwd))`
 
-CONFIG_DIR=$DEPLOY_HOME/conf/conf_ssh_file2db_sync
+CONFIG_DIR=$DEPLOY_HOME/conf
 LIB_DIR=$DEPLOY_HOME/lib
 LIB_JARS=`ls  $LIB_DIR | grep .jar|awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`
 
@@ -13,10 +13,10 @@ JAVA_MEM_OPTS="-server -Xms$deployMem -Xmx$deployMem -XX:PermSize=128m -XX:Survi
 
 #echo $JAVA_MEM_OPTS
 #echo $LIB_JAR
-echo -e "Starting File2DBSyncSSH process...\c"
+echo -e "Starting SSHLotterySearcher process...\c"
 
-#nohup java $JAVA_MEM_OPTS -classpath $CONFIG_DIR:$LIB_JARS com.bd17kaka.LotteryIndexer.sync.File2DBSyncSSH $1 $2 &
-nohup java -classpath $CONFIG_DIR:$LIB_JARS com.bd17kaka.LotteryIndexer.sync.File2DBSyncSSH $1 $2 &
+#nohup java $JAVA_MEM_OPTS -classpath $CONFIG_DIR:$LIB_JARS com.bd17kaka.LotteryIndexer.api.SSHIndexer $1 $2 &
+nohup java -classpath $CONFIG_DIR:$LIB_JARS -jar LotterySearcher-0.0.1-SNAPSHOT.jar &
 
 PID=`ps aux|grep SSHIndexer|grep java|awk '{print $2}'`
 echo -e "\nOK! SSHIndexer pid=$PID ."
