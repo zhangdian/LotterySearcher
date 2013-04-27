@@ -46,4 +46,17 @@ public class SSHCalProbabilityController extends BaseController {
 		writePlain(request, response, String.valueOf(fm));
 	}
 	
+	/**
+	 * 计算最有可能出现的红球序列
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/calRedMostProbability.do")
+	public void calRedMostProbability(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+		
+		sshCalProbabilityService.calRedMostProbability(10);
+		
+	}
 }
