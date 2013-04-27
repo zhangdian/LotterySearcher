@@ -139,7 +139,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 						curValue = redisDao.hget(SSH.RED.getRedisKey(), key);
 						String field = item + ":" + String.format("%02d", j); 
 						log.info(field);
-						curMap.put(field, ((double)(curValue * curPM)/ (double)totalValue));
+						curMap.put(field, curPM * ((double)(curValue) / (double)totalValue));
 						
 					}
 					
@@ -186,7 +186,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 
 		public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
 			
-			return (o1.getValue() > o2.getValue()) ? 1: 0;
+			return (o1.getValue() > o2.getValue()) ? 1 : -1;
 		}
 	}
 
