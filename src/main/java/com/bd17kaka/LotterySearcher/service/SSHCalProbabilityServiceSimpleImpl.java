@@ -119,6 +119,9 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 				Set<String> set = preMap.keySet();
 				for (String item : set) {
 					
+					// 当前组合的概率
+					double curPM = preMap.get(item);
+					
 					// 找到最后的那个球
 					String[] tokens = item.split(":");
 					if (tokens == null || tokens.length == 0) {
@@ -136,7 +139,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 						curValue = redisDao.hget(SSH.RED.getRedisKey(), key);
 						String field = item + ":" + String.format("%02d", j); 
 						log.info(field);
-						curMap.put(field, ((double)curValue / (double)totalValue));
+						curMap.put(field, ((double)(curValue * curPM)/ (double)totalValue));
 						
 					}
 					
@@ -162,8 +165,12 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 			Map<String, Double> preMap = list.get(SSH.RED.getTOTAL() - 1);
 			ArrayList<Entry<String, Double>> tmp = new ArrayList<Entry<String, Double>>(preMap.entrySet());
 			Collections.sort(tmp, new SSHRedProbabilityComparator());
+			int n = 0;
 			for(Entry<String, Double> e : tmp) {  
-	            System.out.println(e.getKey() + "的概率是" + e.getValue());  
+	            System.out.println(e.getKey() + "的概率是" + e.getValue());
+	            if (n++ >= 10) {
+	            	break;
+	            }
 	        }  
 		}
 		
