@@ -21,7 +21,7 @@ import com.bd17kaka.LotterySearcher.service.SSHCalProbabilityService;
 public class SSHCalProbabilityController extends BaseController {
 
 	
-	@Resource(name="sshCalProbabilityServiceSimpleImpl")
+	@Resource(name="sshCalProbabilityServiceSimpleSpan2Impl")
 	private SSHCalProbabilityService sshCalProbabilityService;
 	
 	/**

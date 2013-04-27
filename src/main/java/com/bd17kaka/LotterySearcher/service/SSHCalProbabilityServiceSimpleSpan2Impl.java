@@ -19,10 +19,15 @@ import com.bd17kaka.LotterySearcher.constat.SSH;
 import com.bd17kaka.LotterySearcher.dao.RedisDao;
 import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
 
-@Service(value = "sshCalProbabilityServiceSimpleImpl")
-public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityService {
+/**
+ * @author bd17kaka
+ * 详细注释见 {@code SSHCalProbabilityService}注释
+ * 这个实现只考虑长度为2的组合
+ */
+@Service(value = "sshCalProbabilityServiceSimpleSpan2Impl")
+public class SSHCalProbabilityServiceSimpleSpan2Impl implements SSHCalProbabilityService {
 
-	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleImpl.class);
+	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleSpan2Impl.class);
 	
 	@Resource(name = "redisDao")
 	private RedisDao redisDao;
