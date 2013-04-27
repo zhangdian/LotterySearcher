@@ -99,7 +99,6 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 
 					// 求出每个球的概率
 					String field =  String.format("%02d", j);
-					log.info(field);
 					curValue = map.get(field);
 					curMap.put(field, ((double)curValue / (double)totalValue));
 					
@@ -138,7 +137,6 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 						String key = lastBall + ":" + String.format("%02d", j);
 						curValue = redisDao.hget(SSH.RED.getRedisKey(), key);
 						String field = item + ":" + String.format("%02d", j); 
-						log.info(field);
 						curMap.put(field, curPM * ((double)(curValue) / (double)totalValue));
 						
 					}
@@ -186,7 +184,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 
 		public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
 			
-			return (o1.getValue() > o2.getValue()) ? 1 : -1;
+			return (o1.getValue() < o2.getValue()) ? -1 : 1;
 		}
 	}
 
