@@ -42,13 +42,13 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 		// 首先获取第一个元素出现的概率
 		int value = redisDao.hget(SSH.RED.getRedisKey(), list.get(0));
 		int totalValue = 0;
-		for (int i = 0; i < SSH.RED.getMAX(); i++) {
+		for (int i = 1; i <= SSH.RED.getMAX(); i++) {
 			totalValue += redisDao.hget(SSH.RED.getRedisKey(), String.format("%02d", i));
 		}
 		fm = (double)value / (double)totalValue;
 		
 		// 循环计算后面的概率
-		for (int i = 0; i < size - 2; i++) {
+		for (int i = 0; i < size - 1; i++) {
 			value = redisDao.hget(SSH.RED.getRedisKey(), list.get(i) + ":" + list.get(i + 1));
 			totalValue = redisDao.hget(SSH.RED.getRedisKey(), list.get(i));
 			fm *= (double)value / (double)totalValue; 
@@ -83,7 +83,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 		
 		for (int i = 0; i < SSH.RED.getTOTAL(); i++) {
 			
-			log.info("第" + (i + 1) + "维的数据:");
+			log.info("第" + (i + 1) + "维的数据:");//第1维的数据:
 			
 			// 存储该维度每个组合出现的概率
 			Map<String, Double> curMap = new HashMap<String, Double>();
@@ -184,7 +184,7 @@ public class SSHCalProbabilityServiceSimpleImpl implements SSHCalProbabilityServ
 
 		public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
 			
-			return (o1.getValue() < o2.getValue()) ? -1 : 1;
+			return (o1.getValue() < o2.getValue()) ? 1 : -1;
 		}
 	}
 
