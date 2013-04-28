@@ -51,18 +51,18 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 
 		// 代表六个球号
 		int i = 1, j = 1, k = 1, m = 1, n = 1, l = 1;
-		
-		for (; i <= SSH.RED.getTOTAL(); i++) {
+		int max = SSH.RED.getMAX();
+		for (; i <= max; i++) {
 			
-			for (j = i + 1; j <= SSH.RED.getTOTAL(); j++) {
+			for (j = i + 1; j <= max; j++) {
 				
-				for (k = j + 1; k <= SSH.RED.getTOTAL(); k++) {
+				for (k = j + 1; k <= max; k++) {
 					
-					for (m = k + 1; m <= SSH.RED.getTOTAL(); m++) {
+					for (m = k + 1; m <= max; m++) {
 						
-						for (n = m + 1; n <= SSH.RED.getTOTAL(); n++) {
+						for (n = m + 1; n <= max; n++) {
 							
-							for (l = n + 1; l <= SSH.RED.getTOTAL(); l++) {
+							for (l = n + 1; l <= max; l++) {
 								
 								// 分子 分母
 								long molecular = 10000; 
