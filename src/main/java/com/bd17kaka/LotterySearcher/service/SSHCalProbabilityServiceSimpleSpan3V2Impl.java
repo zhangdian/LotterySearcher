@@ -61,10 +61,16 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 			
 			for (b = a + 1; b <=max; b++) {
 				
+				String field = "";
+				int value = 0;
+
+				field =  String.format("%02d", a) 
+						+ ":" + String.format("%02d", b);
+				value = redisDao.hget(SSH.RED.getRedisKey(), field);
+				combinationMap.put(field, value);
+
 				for (c = b + 1; c <=max; c++) {
 					
-					String field = "";
-					int value = 0;
 					field =  String.format("%02d", a) 
 							+ ":" + String.format("%02d", b) 
 							+ ":" + String.format("%02d", c);
