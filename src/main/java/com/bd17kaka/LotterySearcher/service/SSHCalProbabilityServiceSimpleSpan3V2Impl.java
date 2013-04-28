@@ -36,6 +36,9 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		return 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bd17kaka.LotterySearcher.service.SSHCalProbabilityService#calRedMostProbability(int)
+	 */
 	public List<SSHNewCombination> calRedMostProbability(int size) {
 		
 		/**
@@ -43,16 +46,38 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		 * 计算所有组合的概率，将概率值放大10000倍，也就是万级的概率
 		 * 
 		 * 计算公式：
-		 * 	分子 - (#ABC * #BCD * #CDE * #DEF) * 10000
-		 * 	分母 - (#A * #B * #C * #D * #E * #F) 
+		 * 	分子 - (#ABC * #BCD * #CDE * #DEF * #EF) * 10000
+		 * 	分母 - (#B * #C * #D * #E) 
 		 */
 		
 		// 结果集
 		Map<String, Double> rsMap = new HashMap<String, Double>();
+		
+		// 保存长度为1-3的所有组合的出现个数
+		Map<String, Integer> combinationMap = new HashMap<String, Integer>();
+		int a = 1, b = 1, c = 1;
+		int max = SSH.RED.getMAX();
+		for (; a <=max; a++) {
+			
+			for (b = a + 1; b <=max; b++) {
+				
+				for (c = b + 1; c <=max; c++) {
+					
+					String field = "";
+					int value = 0;
+					field =  String.format("%02d", a) 
+							+ ":" + String.format("%02d", b) 
+							+ ":" + String.format("%02d", c);
+					value = redisDao.hget(SSH.RED.getRedisKey(), field);
+					combinationMap.put(field, value);
+				}
+				
+			}
+			
+		}
 
 		// 代表六个球号
 		int i = 1, j = 1, k = 1, m = 1, n = 1, l = 1;
-		int max = SSH.RED.getMAX();
 		for (; i <= max; i++) {
 			
 			for (j = i + 1; j <= max; j++) {
@@ -74,33 +99,32 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 								field =  String.format("%02d", i) 
 										+ ":" + String.format("%02d", j) 
 										+ ":" + String.format("%02d", k);
-								molecular *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								molecular *= combinationMap.get(field);
 								field =  String.format("%02d", j) 
 										+ ":" + String.format("%02d", k) 
 										+ ":" + String.format("%02d", m);
-								molecular *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								molecular *= combinationMap.get(field);
 								field =  String.format("%02d", k) 
 										+ ":" + String.format("%02d", m) 
 										+ ":" + String.format("%02d", n);
-								molecular *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								molecular *= combinationMap.get(field);
 								field =  String.format("%02d", m) 
 										+ ":" + String.format("%02d", n) 
 										+ ":" + String.format("%02d", l);
-								molecular *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								molecular *= combinationMap.get(field);
+								field =  String.format("%02d", n) 
+										+ ":" + String.format("%02d", l);
+								molecular *= combinationMap.get(field);
 								
 								// 计算分母
-								field =  String.format("%02d", i);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
 								field =  String.format("%02d", j);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								denominator *= combinationMap.get(field);
 								field =  String.format("%02d", k);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								denominator *= combinationMap.get(field);
 								field =  String.format("%02d", m);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								denominator *= combinationMap.get(field);
 								field =  String.format("%02d", n);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
-								field =  String.format("%02d", l);
-								denominator *= redisDao.hget(SSH.RED.getRedisKey(), field);
+								denominator *= combinationMap.get(field);
 								
 								// 保存到结果集
 								field = String.format("%02d", i) 
