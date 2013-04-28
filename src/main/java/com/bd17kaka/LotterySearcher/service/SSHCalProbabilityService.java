@@ -1,6 +1,9 @@
 package com.bd17kaka.LotterySearcher.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
 
@@ -41,5 +44,17 @@ public interface SSHCalProbabilityService {
 	 * @return
 	 */
 	List<SSHNewCombination> calRedMostProbability(int size);
+	
+	/**
+	 * @author bd17kaka
+	 * 对所有的可能性进行排序
+	 */
+	public class SSHRedProbabilityComparator implements Comparator<Map.Entry<String, Double>> {
+
+		public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+			
+			return (o1.getValue() < o2.getValue()) ? 1 : -1;
+		}
+	}
 	
 }

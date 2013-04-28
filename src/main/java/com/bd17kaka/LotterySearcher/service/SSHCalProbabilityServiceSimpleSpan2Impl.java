@@ -88,8 +88,6 @@ public class SSHCalProbabilityServiceSimpleSpan2Impl implements SSHCalProbabilit
 		
 		for (int i = 0; i < SSH.RED.getTOTAL(); i++) {
 			
-			log.info("第" + (i + 1) + "维的数据:");//第1维的数据:
-			
 			// 存储该维度每个组合出现的概率
 			Map<String, Double> curMap = new HashMap<String, Double>();
 			
