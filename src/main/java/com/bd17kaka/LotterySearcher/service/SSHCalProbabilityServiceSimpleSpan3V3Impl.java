@@ -23,10 +23,10 @@ import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
  * 详细注释见 {@code SSHCalProbabilityService}注释
  * 这个实现只考虑长度为2-3的组合
  */
-@Service(value = "sshCalProbabilityServiceSimpleSpan3V2Impl")
-public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabilityService {
+@Service(value = "sshCalProbabilityServiceSimpleSpan3V3Impl")
+public class SSHCalProbabilityServiceSimpleSpan3V3Impl implements SSHCalProbabilityService {
 
-	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleSpan3V2Impl.class);
+	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleSpan3V3Impl.class);
 	
 	@Resource(name = "redisDao")
 	private RedisDao redisDao;
@@ -43,8 +43,8 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		 * 计算所有组合的概率，将概率值放大10000倍，也就是万级的概率
 		 * 
 		 * 计算公式：
-		 * 	分子 - (#ABC * #BCD * #CDE * #DEF * #EF) * 10000
-		 * 	分母 - (#B * #C * #D * #E) 
+		 * 	分子 - (#ABC * #BCD * #CDE * #DEF)^2 * 10000
+		 * 	分母 - (#A * #B * #C * #D) * (#BC * #CD * #DE) 
 		 */
 		
 		// 结果集
@@ -52,29 +52,29 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		
 		// 保存长度为1-3的所有组合的出现个数
 		Map<String, Integer> combinationMap = new HashMap<String, Integer>();
-		int a = 1, b = 1, c = 1;
+		int q = 1, w = 1, r = 1;
 		int max = SSH.RED.getMAX();
-		for (; a <=max; a++) {
+		for (; q <=max; q++) {
 
 			String field = "";
 			int value = 0;
 
-			field =  String.format("%02d", a); 
+			field =  String.format("%02d", q); 
 			value = redisDao.hget(SSH.RED.getRedisKey(), field);
 			combinationMap.put(field, value);
 			
-			for (b = a + 1; b <=max; b++) {
+			for (w = q + 1; w <=max; w++) {
 
-				field =  String.format("%02d", a) 
-						+ ":" + String.format("%02d", b);
+				field =  String.format("%02d", q) 
+						+ ":" + String.format("%02d", w);
 				value = redisDao.hget(SSH.RED.getRedisKey(), field);
 				combinationMap.put(field, value);
 
-				for (c = b + 1; c <=max; c++) {
+				for (r = w + 1; r <=max; r++) {
 					
-					field =  String.format("%02d", a) 
-							+ ":" + String.format("%02d", b) 
-							+ ":" + String.format("%02d", c);
+					field =  String.format("%02d", q) 
+							+ ":" + String.format("%02d", w) 
+							+ ":" + String.format("%02d", r);
 					value = redisDao.hget(SSH.RED.getRedisKey(), field);
 					combinationMap.put(field, value);
 				}
@@ -84,18 +84,18 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		}
 
 		// 代表六个球号
-		int i = 1, j = 1, k = 1, m = 1, n = 1, l = 1;
-		for (; i <= max; i++) {
+		int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1;
+		for (; a <= max; a++) {
 			
-			for (j = i + 1; j <= max; j++) {
+			for (b = a + 1; b <= max; b++) {
 				
-				for (k = j + 1; k <= max; k++) {
+				for (c = b + 1; c <= max; c++) {
 					
-					for (m = k + 1; m <= max; m++) {
+					for (d = c + 1; d <= max; d++) {
 						
-						for (n = m + 1; n <= max; n++) {
+						for (e = d + 1; e <= max; e++) {
 							
-							for (l = n + 1; l <= max; l++) {
+							for (f = e + 1; f <= max; f++) {
 								
 								// 分子 分母
 								long molecular = 10000; 
@@ -103,43 +103,50 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 								String field = "";
 								
 								// 计算分子
-								field =  String.format("%02d", i) 
-										+ ":" + String.format("%02d", j) 
-										+ ":" + String.format("%02d", k);
+								field =  String.format("%02d", a) 
+										+ ":" + String.format("%02d", b) 
+										+ ":" + String.format("%02d", c);
 								molecular *= combinationMap.get(field);
-								field =  String.format("%02d", j) 
-										+ ":" + String.format("%02d", k) 
-										+ ":" + String.format("%02d", m);
+								field =  String.format("%02d", b) 
+										+ ":" + String.format("%02d", c) 
+										+ ":" + String.format("%02d", d);
 								molecular *= combinationMap.get(field);
-								field =  String.format("%02d", k) 
-										+ ":" + String.format("%02d", m) 
-										+ ":" + String.format("%02d", n);
+								field =  String.format("%02d", c) 
+										+ ":" + String.format("%02d", d) 
+										+ ":" + String.format("%02d", e);
 								molecular *= combinationMap.get(field);
-								field =  String.format("%02d", m) 
-										+ ":" + String.format("%02d", n) 
-										+ ":" + String.format("%02d", l);
+								field =  String.format("%02d", d) 
+										+ ":" + String.format("%02d", e) 
+										+ ":" + String.format("%02d", f);
 								molecular *= combinationMap.get(field);
-								field =  String.format("%02d", n) 
-										+ ":" + String.format("%02d", l);
-								molecular *= combinationMap.get(field);
+								molecular *= molecular;
 								
 								// 计算分母
-								field =  String.format("%02d", j);
+								field =  String.format("%02d", a);
 								denominator *= combinationMap.get(field);
-								field =  String.format("%02d", k);
+								field =  String.format("%02d", b);
 								denominator *= combinationMap.get(field);
-								field =  String.format("%02d", m);
+								field =  String.format("%02d", c);
 								denominator *= combinationMap.get(field);
-								field =  String.format("%02d", n);
+								field =  String.format("%02d", d);
+								denominator *= combinationMap.get(field);
+								field =  String.format("%02d", b) 
+										+ ":" + String.format("%02d", c);
+								denominator *= combinationMap.get(field);
+								field =  String.format("%02d", c) 
+										+ ":" + String.format("%02d", d);
+								denominator *= combinationMap.get(field);
+								field =  String.format("%02d", d) 
+										+ ":" + String.format("%02d", e);
 								denominator *= combinationMap.get(field);
 								
 								// 保存到结果集
-								field = String.format("%02d", i) 
-										+ ":" + String.format("%02d", j) 
-										+ ":" + String.format("%02d", k) 
-										+ ":" + String.format("%02d", m)
-										+ ":" + String.format("%02d", n)
-										+ ":" + String.format("%02d", l);
+								field = String.format("%02d", a) 
+										+ ":" + String.format("%02d", b) 
+										+ ":" + String.format("%02d", c) 
+										+ ":" + String.format("%02d", d)
+										+ ":" + String.format("%02d", e)
+										+ ":" + String.format("%02d", f);
 								double rs = (double)molecular / (double)denominator;
 								rsMap.put(field, rs);
 								log.info("组合[" + field + "]: " + rs);
