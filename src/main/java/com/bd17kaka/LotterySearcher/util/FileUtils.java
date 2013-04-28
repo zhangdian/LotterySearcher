@@ -1,4 +1,4 @@
-package com.bd17kaka.util;
+package com.bd17kaka.LotterySearcher.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
