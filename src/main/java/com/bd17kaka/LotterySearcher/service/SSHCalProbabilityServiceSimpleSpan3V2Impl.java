@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -108,8 +109,20 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 										+ ":" + String.format("%02d", m)
 										+ ":" + String.format("%02d", n)
 										+ ":" + String.format("%02d", l);
-								rsMap.put(field, (double)molecular / (double)denominator);
+								double rs = (double)molecular / (double)denominator;
+								rsMap.put(field, rs);
+								log.info("组合[" + field + "]: " + rs);
 								
+								// 如果结果集超过了size个，进行排序，剔除最后的一个
+								if (rsMap.size() > size) {
+									
+									ArrayList<Entry<String, Double>> tmp = new ArrayList<Entry<String, Double>>(rsMap.entrySet());
+									Collections.sort(tmp, new SSHRedProbabilityComparator());
+									Entry<String, Double> which2Del = tmp.get(tmp.size() - 1);
+									rsMap.remove(which2Del.getKey());
+									log.info("组合[" + which2Del.getKey() + "]被删除, 其概率为" + which2Del.getValue());
+									
+								}
 							}
 							
 						}
@@ -122,16 +135,12 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 			
 		}
 		
-		// 排序获取概率最大的size个组合
-		ArrayList<Entry<String, Double>> tmp = new ArrayList<Entry<String, Double>>(rsMap.entrySet());
-		Collections.sort(tmp, new SSHRedProbabilityComparator());
-		int t = 0;
-		for(Entry<String, Double> e : tmp) {  
-            log.info(e.getKey() + "的概率是" + e.getValue());
-            if (t++ >= 10) {
-            	break;
-            }
-        }  
+		// 打印概率最大的10个组合
+		log.info("-----------------------TOP 10-----------------------------");
+		Set<String> set = rsMap.keySet();
+		for (String item : set) {
+			log.info("组合[" + item + "]: " + rsMap.get(item));
+		}
 		
 		return null;
 		
