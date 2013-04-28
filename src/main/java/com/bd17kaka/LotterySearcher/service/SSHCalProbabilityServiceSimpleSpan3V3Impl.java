@@ -147,7 +147,10 @@ public class SSHCalProbabilityServiceSimpleSpan3V3Impl implements SSHCalProbabil
 										+ ":" + String.format("%02d", d)
 										+ ":" + String.format("%02d", e)
 										+ ":" + String.format("%02d", f);
-								double rs = (double)molecular / (double)denominator;
+								double rs = 0.0;
+								if (denominator != 0) {
+									rs = (double)molecular / (double)denominator;
+								}
 								rsMap.put(field, rs);
 								log.info("组合[" + field + "]: " + rs);
 								
