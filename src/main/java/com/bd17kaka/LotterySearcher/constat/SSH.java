@@ -289,4 +289,257 @@ public enum SSH {
 	 * @return
 	 */
 	public abstract List<String> indexer(List<String> list);
+	
+	/**
+	 * @author bd17kaka
+	 * 红球的分布，共28种分布
+	 * 006的意思是：
+	 * 		01-11有0个球
+	 * 		12-22有0个球
+	 * 		23-33有6个球
+	 */
+	public enum RedDistributed {
+		_006(6, "006"), 
+		_015(15, "015"),
+		_024(24, "024"),
+		_033(33, "033"),
+		_042(42, "042"),
+		_051(51, "051"),
+		_060(60, "060"),
+		_105(105, "105"),
+		_114(114, "114"),
+		_123(123, "123"),
+		_132(132, "132"),
+		_141(141, "141"),
+		_150(150, "150"),
+		_204(204, "204"),
+		_213(213, "213"),
+		_222(222, "222"),
+		_231(231, "231"),
+		_240(240, "240"),
+		_303(303, "303"),
+		_312(312, "312"),
+		_321(321, "321"),
+		_330(330, "330"),
+		_402(402, "402"),
+		_411(411, "411"),
+		_420(420, "420"),
+		_501(501, "501"),
+		_510(510, "510"),
+		_600(600, "600");
+		
+		private int type;
+		private String des;
+
+		private RedDistributed(int type, String des) {
+
+			this.type = type;
+			this.des = des;
+
+		}
+		
+		public int getType() {
+			return type;
+		}
+
+		public void setType(int type) {
+			this.type = type;
+		}
+
+		public String getDes() {
+			return des;
+		}
+
+		public void setDes(String des) {
+			this.des = des;
+		}
+
+		public static Map<Integer, RedDistributed> getReddistributedMap() {
+			return RedDistributed_MAP;
+		}
+
+		/**
+		 * get object from key
+		 */
+		private static final Map<Integer, RedDistributed> RedDistributed_MAP;
+		static {
+			RedDistributed_MAP = new HashMap<Integer, RedDistributed>();
+			for (RedDistributed l : values()) {
+				RedDistributed_MAP.put(l.getType(), l);
+			}
+		}
+		public static RedDistributed getRedDistributed(int type) {
+			return RedDistributed_MAP.get(type);
+		} 
+		
+		/**
+		 * 获取开奖结果的球号分布
+		 * @param input 经过SSH.getNumsFromInuput()处理之后的所有球号列表
+		 * @return
+		 */
+		public static RedDistributed getRedBallDistributed(List<String> input) {
+			
+			if (null == input) {
+				return null;
+			}
+			
+		
+			/**
+			 * distributedList[0]: Left个数
+			 * distributedList[1]: Middle个数
+			 * distributedList[2]: Right个数
+			 */
+			Integer[] distributedList = new Integer[SingleRedDistributed.getTOTAL()];
+			for (int i = 0; i < SingleRedDistributed.getTOTAL(); i++) {
+				distributedList[i] = new Integer(0);
+			}
+			
+			for (String item : input) {
+				
+				SingleRedDistributed rs = SingleRedDistributed.testRedDistributed(item);
+				if (rs == null) {
+					return null;
+				}
+				
+				int curVal = distributedList[rs.getType()];
+				distributedList[rs.getType()] = curVal + 1;
+			
+			}
+			
+			/**
+			 * Left个数*100 + Middle个数*10 + Right个数 * 1
+			 */
+			int type = distributedList[0] * 100 + distributedList[1] * 10 + distributedList[2] * 1;
+			return RedDistributed.getRedDistributed(type);
+		}
+	}
+	
+	/**
+	 * @author bd17kaka
+	 * 单个红球的分布
+	 * 
+	 * 01-11是left
+	 * 12-22是middle
+	 * 23-33是right
+	 */
+	public enum SingleRedDistributed {
+		
+		LEFT(0, "LEFT") {
+			@Override
+			public int getMAX() {
+				return 11;
+			}
+
+			@Override
+			public int getMIN() {
+				return 1;
+			}
+		}, 
+		MIDDLE(1, "MIDDLE") {
+			@Override
+			public int getMAX() {
+				return 22;
+			}
+
+			@Override
+			public int getMIN() {
+				return 12;
+			}
+		},
+		RIGHT(2, "RIGHT") {
+			@Override
+			public int getMAX() {
+				return 33;
+			}
+
+			@Override
+			public int getMIN() {
+				return 23;
+			}
+		};
+	
+		public static final int TOTAL = 3;
+		
+		public static int getTOTAL() {
+			return TOTAL;
+		}
+		
+		private int type;
+		private String des;
+
+		private SingleRedDistributed(int type, String des) {
+
+			this.type = type;
+			this.des = des;
+		}
+
+		public int getType() {
+			return type;
+		}
+
+		public void setType(int type) {
+			this.type = type;
+		}
+
+		public String getDes() {
+			return des;
+		}
+
+		public void setDes(String des) {
+			this.des = des;
+		}
+		
+		/**
+		 * get object from key
+		 */
+		private static final Map<Integer, SingleRedDistributed> SingleRedDistributed_MAP;
+		static {
+			SingleRedDistributed_MAP = new HashMap<Integer, SingleRedDistributed>();
+			for (SingleRedDistributed l : values()) {
+				SingleRedDistributed_MAP.put(l.getType(), l);
+			}
+		}
+		public static SingleRedDistributed getSingleRedDistributed(int type) {
+			return SingleRedDistributed_MAP.get(type);
+		} 
+		
+		/**
+		 * 判断一个球属于哪种分布
+		 * @param ball
+		 * @return
+		 */
+		public static SingleRedDistributed testRedDistributed (String ball) {
+
+			int type = 0;
+			try {
+				type = Integer.parseInt(ball);
+			} catch (Exception e) {
+				return null;
+			}
+			
+			return getSingleRedDistributed((type - 1) / 11);
+			
+		}
+		
+		/**
+		 * 返回某区间的最大值
+		 * @return
+		 */
+		public abstract int getMAX();
+		/**
+		 * 返回某区间的最小值
+		 * @return
+		 */
+		public abstract int getMIN();
+	}
+	
+	public static void main(String[] args) {
+		String input = "02,04,11,15,23,33";
+		List<String> list = SSH.RED.getNumsFromInuput(input);
+		for (String string : list) {
+			System.out.println(string);
+		}
+		
+		System.out.println(RedDistributed.getRedBallDistributed(list));
+	}
 }
