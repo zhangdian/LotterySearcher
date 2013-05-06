@@ -22,11 +22,13 @@ import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
  * @author bd17kaka
  * 详细注释见 {@code SSHCalProbabilityService}注释
  * 这个实现只考虑长度为2-3的组合
+ * 
+ * 引入球号分布的概念
  */
-@Service(value = "sshCalProbabilityServiceSimpleSpan3V3Impl")
-public class SSHCalProbabilityServiceSimpleSpan3V3Impl implements SSHCalProbabilityService {
+@Service(value = "sshCalProbabilityServiceSimpleSpan3V5Impl")
+public class SSHCalProbabilityServiceSimpleSpan3V5Impl implements SSHCalProbabilityService {
 
-	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleSpan3V3Impl.class);
+	private static final Log log = LogFactory.getLog(SSHCalProbabilityServiceSimpleSpan3V5Impl.class);
 	
 	@Resource(name = "redisDao")
 	private RedisDao redisDao;
@@ -86,12 +88,7 @@ public class SSHCalProbabilityServiceSimpleSpan3V3Impl implements SSHCalProbabil
 		}
 
 		// 代表六个球号
-		int a = 1, 
-			b = 1, 
-			c = 1, 
-			d = 1, 
-			e = 1, 
-			f = 1;
+		int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1;
 		for (; a <= max; a++) {
 			
 			for (b = a + 1; b <= max; b++) {

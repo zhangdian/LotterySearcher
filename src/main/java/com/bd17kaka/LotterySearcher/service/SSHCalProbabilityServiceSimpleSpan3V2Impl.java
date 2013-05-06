@@ -36,16 +36,18 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 		return 0;
 	}
 
+	/**
+	 * 首先遍历出所有组合
+	 * 计算所有组合的概率，将概率值放大10000倍，也就是万级的概率
+	 * 
+	 * 只考虑长度为3的组合
+	 * 
+	 * 计算公式：
+	 * 	分子 - (#ABC * #BCD * #CDE * #DEF * #EF) * 10000
+	 * 	分母 - (#B * #C * #D * #E) 
+	 */
 	public List<SSHNewCombination> calRedMostProbability(int size) {
 		
-		/**
-		 * 首先遍历出所有组合
-		 * 计算所有组合的概率，将概率值放大10000倍，也就是万级的概率
-		 * 
-		 * 计算公式：
-		 * 	分子 - (#ABC * #BCD * #CDE * #DEF * #EF) * 10000
-		 * 	分母 - (#B * #C * #D * #E) 
-		 */
 		
 		// 结果集
 		Map<String, Double> rsMap = new HashMap<String, Double>();

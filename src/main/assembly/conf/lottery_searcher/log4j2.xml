@@ -14,7 +14,7 @@
 			</PatternLayout>
 			<Policies>
 				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
+				<SizeBasedTriggeringPolicy size="1024 MB" />
 			</Policies>
 			<DefaultRolloverStrategy max="15" />
 		</RollingFile>
