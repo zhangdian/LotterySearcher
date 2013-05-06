@@ -128,6 +128,8 @@ public class ListTopNCombination {
 			
 			Set<Integer> keys = mapRedDistributed.keySet();
 			for (Integer key : keys) {
+
+				log.info("Key: " + key);
 				
 				// 结果集
 				Map<String, Double> rsMap = new HashMap<String, Double>();
@@ -141,16 +143,19 @@ public class ListTopNCombination {
 				leftNum = key / 100;
 				for (int i = 0; i < leftNum; i++) {
 					balls[i] = SSH.SingleRedDistributed.LEFT.getMAX();
+					log.info("balls[" + i + "]=" + balls[i]);
 				}
 				
 				middleNum = (key % 100) / 10;
 				for (int i = 0; i < middleNum; i++) {
 					balls[leftNum + i] = SSH.SingleRedDistributed.MIDDLE.getMAX();
+					log.info("balls[" + (leftNum + i) + "]=" + balls[leftNum + i]);
 				}
 				
 				rightNum = ((key % 100) % 10) / 1;
 				for (int i = 0; i < rightNum; i++) {
 					balls[leftNum + middleNum + i] = SSH.SingleRedDistributed.RIGHT.getMAX();
+					log.info("balls[" + (leftNum + middleNum + i) + "]=" + balls[leftNum + middleNum + i]);
 				}
 
 				// 应用SimpleSpan3V3算法, 下面代表六个球
@@ -262,13 +267,14 @@ public class ListTopNCombination {
 				if (rsKeys == null) {
 					return;
 				}
-				log.info("Key: " + key);
+
 				for (String rsKey : rsKeys) {
 					String redisKey 	= "topn_combination:simple_span3v5:" + String.format("%02d", key);
 					String redisField	= rsKey;
 					String redisValue	= String.valueOf(rsMap.get(rsKey));
 					redisDao.hset(redisKey, redisField, redisValue);
 					log.info("\t<" + redisField + ", " + redisValue + ">");
+					rsMap.remove(rsKey);
 				}
 				
 			}
