@@ -135,47 +135,66 @@ public class ListTopNCombination {
 				Map<String, Double> rsMap = new HashMap<String, Double>();
 				
 				// 找到分解线
-				Integer[] balls = new Integer[6];
+				Integer[] ballsStart = new Integer[6]; // 值为0代表将start赋值为上一维的start+1
+				Integer[] ballsEnd = new Integer[6];
 				int leftNum 	= 0,
 					middleNum 	= 0,
 					rightNum	= 0;
 				
 				leftNum = key / 100;
 				for (int i = 0; i < leftNum; i++) {
-					balls[i] = SSH.SingleRedDistributed.LEFT.getMAX();
-					log.info("balls[" + i + "]=" + balls[i]);
+					if (i == 0) {
+						ballsStart[i] = SSH.SingleRedDistributed.LEFT.getMIN();
+					} else {
+						ballsStart[i] = 0;
+					}
+					ballsEnd[i] = SSH.SingleRedDistributed.LEFT.getMAX();
+					log.info("balls_start[" + i + "]=" + ballsStart[i]);
+					log.info("balls_end[" + i + "]=" + ballsEnd[i]);
 				}
 				
 				middleNum = (key % 100) / 10;
 				for (int i = 0; i < middleNum; i++) {
-					balls[leftNum + i] = SSH.SingleRedDistributed.MIDDLE.getMAX();
-					log.info("balls[" + (leftNum + i) + "]=" + balls[leftNum + i]);
+					if (i == 0) {
+						ballsStart[leftNum + i] = SSH.SingleRedDistributed.MIDDLE.getMIN();
+					} else {
+						ballsStart[leftNum + i] = 0;
+					}
+					ballsEnd[leftNum + i] = SSH.SingleRedDistributed.MIDDLE.getMAX();
+					log.info("balls_start[" + (leftNum + i) + "]=" + ballsStart[leftNum + i]);
+					log.info("balls_end[" + (leftNum + i) + "]=" + ballsEnd[leftNum + i]);
 				}
 				
 				rightNum = ((key % 100) % 10) / 1;
 				for (int i = 0; i < rightNum; i++) {
-					balls[leftNum + middleNum + i] = SSH.SingleRedDistributed.RIGHT.getMAX();
-					log.info("balls[" + (leftNum + middleNum + i) + "]=" + balls[leftNum + middleNum + i]);
+					if (i == 0) {
+						ballsStart[leftNum + middleNum + i] = SSH.SingleRedDistributed.RIGHT.getMIN();
+					} else {
+						ballsStart[leftNum + middleNum + i] = 0;
+					}
+					ballsEnd[leftNum + middleNum + i] = SSH.SingleRedDistributed.RIGHT.getMAX();
+					log.info("balls_start[" + (leftNum + middleNum + i) + "]=" + ballsStart[leftNum + middleNum + i]);
+					log.info("balls_end[" + (leftNum + middleNum + i) + "]=" + ballsEnd[leftNum + middleNum + i]);
 				}
 
 				// 应用SimpleSpan3V3算法, 下面代表六个球
-				int a = 1, 
+				int a = ballsStart[0], 
 					b = 1, 
-					c = 1, 
-					d = 1, 
-					e = 1, 
+					c = 1,
+					d = 1,
+					e = 1,
 					f = 1;
-				for (; a <= balls[0]; a++) {
-					
-					for (b = a + 1; b <= balls[1]; b++) {
-						
-						for (c = b + 1; c <= balls[2]; c++) {
-							
-							for (d = c + 1; d <= balls[3]; d++) {
-								
-								for (e = d + 1; e <= balls[4]; e++) {
-									
-									for (f = e + 1; f <= balls[5]; f++) {
+				for (; a <= ballsEnd[0]; a++) {
+					b = (ballsStart[1] == 0) ? (a + 1) : ballsStart[1];
+					for (;b <= ballsEnd[1]; b++) {
+						c = (ballsStart[2] == 0) ? (b + 1) : ballsStart[2];
+						for (; c <= ballsEnd[2]; c++) {
+							d = (ballsStart[3] == 0) ? (c + 1) : ballsStart[3];
+							for (; d <= ballsEnd[3]; d++) {
+								e = (ballsStart[4] == 0) ? (d + 1) : ballsStart[4];
+								for (; e <= ballsEnd[4]; e++) {
+									f = (ballsStart[5] == 0) ? (e + 1) : ballsStart[5];
+									for (; f <= ballsEnd[5]; f++) {
 										
 										// 分子 分母
 										long molecular = 10000; 
@@ -274,9 +293,9 @@ public class ListTopNCombination {
 					String redisValue	= String.valueOf(rsMap.get(rsKey));
 					redisDao.hset(redisKey, redisField, redisValue);
 					log.info("\t<" + redisField + ", " + redisValue + ">");
-					rsMap.remove(rsKey);
 				}
 				
+				rsMap.clear();
 			}
 			
 		}
