@@ -12,13 +12,8 @@
 			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
-			<directory>src/main/assembly/conf/list_topn_probability_combination</directory>
-			<outputDirectory>LotterySearcher/conf/list_topn_probability_combination</outputDirectory>
-			<fileMode>0644</fileMode>
-		</fileSet>
-			<fileSet>
-			<directory>src/main/assembly/conf/lottery_searcher</directory>
-			<outputDirectory>LotterySearcher/conf/lottery_searcher</outputDirectory>
+			<directory>src/main/assembly/conf</directory>
+			<outputDirectory>LotterySearcher/conf</outputDirectory>
 			<fileMode>0644</fileMode>
 		</fileSet>
 	</fileSets>
