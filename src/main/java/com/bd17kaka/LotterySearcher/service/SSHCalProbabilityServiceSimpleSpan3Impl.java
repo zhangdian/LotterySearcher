@@ -50,7 +50,7 @@ public class SSHCalProbabilityServiceSimpleSpan3Impl implements SSHCalProbabilit
 	 * 
 	 * 考虑长度范围是2-3的组合
 	 */
-	public List<SSHNewCombination> calRedMostProbability(int size) {
+	public List<SSHNewCombination> calRedMostProbability(int size, String...strings) {
 		
 		/**
 		 * 每个维度的所有球号的出现概率存在一个Map中，所有维度组成一个List，结构如下：

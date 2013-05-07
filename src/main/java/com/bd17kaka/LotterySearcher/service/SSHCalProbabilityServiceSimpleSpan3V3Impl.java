@@ -36,7 +36,7 @@ public class SSHCalProbabilityServiceSimpleSpan3V3Impl implements SSHCalProbabil
 		return 0;
 	}
 
-	public List<SSHNewCombination> calRedMostProbability(int size) {
+	public List<SSHNewCombination> calRedMostProbability(int size, String...strings) {
 		
 		/**
 		 * 首先遍历出所有组合

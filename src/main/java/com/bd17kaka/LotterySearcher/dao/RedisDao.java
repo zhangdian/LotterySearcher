@@ -1,6 +1,7 @@
 package com.bd17kaka.LotterySearcher.dao;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,5 +24,17 @@ public interface RedisDao {
 	 * @param value
 	 */
 	void hset(String redisKey, String field, String value);
+	
+	/**
+	 * @param redisKey
+	 * @return
+	 */
+	Map<String, String> hgetAll(String redisKey);
+	
+	/**
+	 * 删除一个Key
+	 * @param redisKey
+	 */
+	void del(String redisKey);
 	
 }

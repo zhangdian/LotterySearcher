@@ -24,9 +24,11 @@ public interface SSHCalProbabilityService {
 	/**
 	 * 获取size个最后可能出现的球号序列
 	 * @param size 获取最可能出现的序列的个数
+	 * @param strings 只有{@link SSHCalProbabilityServiceSimpleSpan3V5Impl}使用该参数
+	 * 			strings[0]: 分布类型
 	 * @return
 	 */
-	List<SSHNewCombination> calRedMostProbability(int size);
+	List<SSHNewCombination> calRedMostProbability(int size, String...strings);
 	
 	/**
 	 * @author bd17kaka

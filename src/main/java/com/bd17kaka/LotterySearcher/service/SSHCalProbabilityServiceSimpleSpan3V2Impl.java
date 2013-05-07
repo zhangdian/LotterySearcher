@@ -46,7 +46,7 @@ public class SSHCalProbabilityServiceSimpleSpan3V2Impl implements SSHCalProbabil
 	 * 	分子 - (#ABC * #BCD * #CDE * #DEF * #EF) * 10000
 	 * 	分母 - (#B * #C * #D * #E) 
 	 */
-	public List<SSHNewCombination> calRedMostProbability(int size) {
+	public List<SSHNewCombination> calRedMostProbability(int size, String...strings) {
 		
 		
 		// 结果集

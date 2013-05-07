@@ -412,6 +412,17 @@ public enum SSH {
 			int type = distributedList[0] * 100 + distributedList[1] * 10 + distributedList[2] * 1;
 			return RedDistributed.getRedDistributed(type);
 		}
+		
+		/**
+		 * 获取算法SimpleSpan3V5使用RedDistributed时，在redis中存储的key
+		 * @param distribution
+		 * @return
+		 */
+		public static String getRedisKeyOfSimpleSpan3V5(int distribution) {
+			
+			return "topn_combination:simple_span3v5:" + String.format("%03d", distribution);
+			
+		}
 	}
 	
 	/**

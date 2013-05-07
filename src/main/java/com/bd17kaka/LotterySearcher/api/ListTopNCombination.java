@@ -276,7 +276,7 @@ public class ListTopNCombination {
 				}
 				
 				/**
-				 *  此处已经得到了结果集，将结果集存储到Redis中，清空rsMap，进行下一轮
+				 *  此处已经得到了结果集，首先删除Redis中这个key，然后将结果集存储到Redis中，清空rsMap，进行下一轮
 				 *	key: 	"topn_combination:simple_span3v5:${distribution}"
 				 * 	field: 	${combination}
 				 * 	value:	${probabolity}
@@ -287,8 +287,9 @@ public class ListTopNCombination {
 					return;
 				}
 
+				String redisKey = RedDistributed.getRedisKeyOfSimpleSpan3V5(key);
+				redisDao.del(redisKey);
 				for (String rsKey : rsKeys) {
-					String redisKey 	= "topn_combination:simple_span3v5:" + String.format("%02d", key);
 					String redisField	= rsKey;
 					String redisValue	= String.valueOf(rsMap.get(rsKey));
 					redisDao.hset(redisKey, redisField, redisValue);
