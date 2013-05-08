@@ -1,11 +1,6 @@
 package com.bd17kaka.LotterySearcher.service;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
 
 /**
  * @author bd17kaka
@@ -23,23 +18,12 @@ public interface SSHCalProbabilityService {
 	
 	/**
 	 * 获取size个最后可能出现的球号序列
-	 * @param size 获取最可能出现的序列的个数
+	 * 数据从Redis获取
+	 * @param size 获取最可能出现的序列的个数 TODO:最大数现在写死了，都是10个
 	 * @param strings 只有{@link SSHCalProbabilityServiceSimpleSpan3V5Impl}使用该参数
 	 * 			strings[0]: 分布类型
 	 * @return
 	 */
-	List<SSHNewCombination> calRedMostProbability(int size, String...strings);
-	
-	/**
-	 * @author bd17kaka
-	 * 对所有的可能性进行排序
-	 */
-	public class SSHRedProbabilityComparator implements Comparator<Map.Entry<String, Double>> {
-
-		public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
-			
-			return (o1.getValue() < o2.getValue()) ? 1 : -1;
-		}
-	}
+	Map<String, Double> calRedMostProbability(int size, String...strings);
 	
 }

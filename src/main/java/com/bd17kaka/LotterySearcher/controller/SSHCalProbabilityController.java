@@ -1,6 +1,7 @@
 package com.bd17kaka.LotterySearcher.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bd17kaka.LotterySearcher.constat.SSH.SSHRedAlgorithm;
 import com.bd17kaka.LotterySearcher.service.SSHCalProbabilityService;
 
 /**
@@ -44,5 +46,28 @@ public class SSHCalProbabilityController extends BaseController {
 		
 		double fm = sshCalProbabilityService.calRedProbability(input);
 		writePlain(request, response, String.valueOf(fm));
+	}
+	
+	/**
+	 * 计算最有可能的双色球
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/sshCalRedMostProbability.do")
+	public void sshCalRedMostProbability(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+		
+		// 只有Simple_Span3v5有这个字段
+		String distribute = StringUtils.trimToEmpty(request.getParameter("distribute"));
+		
+		Map<String, Double> rsMap = sshCalProbabilityService.calRedMostProbability(SSHRedAlgorithm.getMaxTotal(), distribute);
+		if (rsMap == null) {
+			writePlain(request, response, "{}");
+		}
+		
+		// TODO: 将rsMap瓶装成JSON
+		
+		writePlain(request, response, "");
 	}
 }

@@ -1,7 +1,9 @@
 package com.bd17kaka.LotterySearcher.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -11,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.bd17kaka.LotterySearcher.constat.SSH;
 import com.bd17kaka.LotterySearcher.constat.SSH.RedDistributed;
+import com.bd17kaka.LotterySearcher.constat.SSH.SSHRedAlgorithm;
 import com.bd17kaka.LotterySearcher.dao.RedisDao;
-import com.bd17kaka.LotterySearcher.po.SSHNewCombination;
 
 /**
  * @author bd17kaka
@@ -97,7 +99,7 @@ public class SSHCalProbabilityServiceSimpleSpan3V5Impl implements SSHCalProbabil
 		
 		return rs;
 	}
-	public List<SSHNewCombination> calRedMostProbability(int size, String...strings) {
+	public Map<String, Double> calRedMostProbability(int size, String...strings) {
 
 		// 参数检查，找到输入的红球分布
 		if (null == strings) {
@@ -111,17 +113,29 @@ public class SSHCalProbabilityServiceSimpleSpan3V5Impl implements SSHCalProbabil
 		} catch (Exception e) {
 			return null;
 		}
-		
-		RedDistributed tmp = RedDistributed.getRedDistributed(sshRedDistribute);
-		if (null == tmp) {
+		RedDistributed redDistributed = RedDistributed.getRedDistributed(sshRedDistribute);
+		if (null == redDistributed) {
 			return null;
 		}
 		
 		// 从Redis中获取所有的值
-		Map<String, String> map = redisDao.hgetAll(RedDistributed.getRedisKeyOfSimpleSpan3V5(sshRedDistribute));
+		Map<String, String> map = redisDao.hgetAll(SSHRedAlgorithm.getRedisKeyOfTopNCombinationByDistribution(sshRedDistribute));
+		if (map == null) {
+			return null;
+		}
+		Set<String> keys = map.keySet();
+		Map<String, Double> rsMap = new HashMap<String, Double>();
+		for (String key : keys) {
+			
+			double value = 0;
+			try {
+				value = Double.parseDouble(map.get(key));
+			} catch (Exception e) {
+				continue;
+			}
+			rsMap.put(key, value);
+		}
 		
-		// TODO: 瓶装成要返回的对象。这里的返回值是不是要改成Map
-		
-		return null;
+		return rsMap;
 	}
 }
