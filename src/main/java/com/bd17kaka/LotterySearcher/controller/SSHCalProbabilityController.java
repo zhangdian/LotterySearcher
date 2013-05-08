@@ -38,7 +38,7 @@ public class SSHCalProbabilityController extends BaseController {
 		
 		String input = StringUtils.trimToEmpty(request.getParameter("input"));
 		if (StringUtils.isEmpty(input)) {
-			writePlain(request, response, "输入有误");
+			writePlain(request, response, "输入不能为空");
 			return;
 		}
 		

@@ -1,12 +1,7 @@
 package com.bd17kaka.LotterySearcher.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -35,10 +30,73 @@ public class SSHCalProbabilityServiceSimpleSpan3V5Impl implements SSHCalProbabil
 	private RedisDao redisDao;
 
 	public double calRedProbability(String input) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		
+		List<String> list = SSH.RED.getNumsFromInuput(input);
+		if (list == null) {
+			return 0;
+		}
+		
+		// 六个球
+		int 	a = Integer.parseInt(list.get(0)),
+				b = Integer.parseInt(list.get(1)),
+				c = Integer.parseInt(list.get(2)),
+				d = Integer.parseInt(list.get(3)),
+				e = Integer.parseInt(list.get(4)),
+				f = Integer.parseInt(list.get(5));
+		
+		// 分子 分母
+		long molecular 		= 10000; 
+		long denominator 	= 1;
+		String field 		= "";
+		String redisKey 	= SSH.RED.getRedisKey();
+		
+		// 计算分子
+		field =  String.format("%02d", a) 
+				+ ":" + String.format("%02d", b) 
+				+ ":" + String.format("%02d", c);
+		molecular *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", b) 
+				+ ":" + String.format("%02d", c) 
+				+ ":" + String.format("%02d", d);
+		molecular *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", c) 
+				+ ":" + String.format("%02d", d) 
+				+ ":" + String.format("%02d", e);
+		molecular *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", d) 
+				+ ":" + String.format("%02d", e) 
+				+ ":" + String.format("%02d", f);
+		molecular *= redisDao.hget(redisKey, field);
+		molecular *= molecular;
+		
+		// 计算分母
+		field =  String.format("%02d", a);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", b);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", c);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", d);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", b) 
+				+ ":" + String.format("%02d", c);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", c) 
+				+ ":" + String.format("%02d", d);
+		denominator *= redisDao.hget(redisKey, field);
+		field =  String.format("%02d", d) 
+				+ ":" + String.format("%02d", e);
+		denominator *= redisDao.hget(redisKey, field);
 
+		// 结果
+		double rs = 0.0;
+		if (denominator != 0) {
+			rs = (double)molecular / (double)denominator;
+		}
+		log.info(input + " : " + rs);
+		
+		return rs;
+	}
 	public List<SSHNewCombination> calRedMostProbability(int size, String...strings) {
 
 		// 参数检查，找到输入的红球分布
