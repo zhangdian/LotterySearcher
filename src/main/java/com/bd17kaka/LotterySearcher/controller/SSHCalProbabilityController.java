@@ -75,7 +75,7 @@ public class SSHCalProbabilityController extends BaseController {
 		Set<String> keys = rsMap.keySet();
 		for (String key : keys) {
 			JSONObject o = new JSONObject();
-			o.put(keys, rsMap.get(key));
+			o.put(key, rsMap.get(key));
 			array.add(o);
 		}
 		
