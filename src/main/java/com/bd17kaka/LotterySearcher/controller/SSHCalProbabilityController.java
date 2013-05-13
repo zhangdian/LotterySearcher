@@ -2,11 +2,15 @@ package com.bd17kaka.LotterySearcher.controller;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -62,12 +66,19 @@ public class SSHCalProbabilityController extends BaseController {
 		String distribute = StringUtils.trimToEmpty(request.getParameter("distribute"));
 		
 		Map<String, Double> rsMap = sshCalProbabilityService.calRedMostProbability(SSHRedAlgorithm.getMaxTotal(), distribute);
-		if (rsMap == null) {
+		if (rsMap == null || rsMap.size() == 0) {
 			writePlain(request, response, "{}");
 		}
 		
-		// TODO: 将rsMap瓶装成JSON
+		// 将rsMap瓶装成JSON
+		JSONArray array = new JSONArray();
+		Set<String> keys = rsMap.keySet();
+		for (String key : keys) {
+			JSONObject o = new JSONObject();
+			o.put(keys, rsMap.get(key));
+			array.add(o);
+		}
 		
-		writePlain(request, response, "");
+		writePlain(request, response, array.toString());
 	}
 }
