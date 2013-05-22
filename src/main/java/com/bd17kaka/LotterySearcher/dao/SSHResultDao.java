@@ -14,5 +14,12 @@ public interface SSHResultDao {
 	 * @return
 	 */
 	boolean insert(SSHResult sshResult);
+	
+	/**
+	 * 获取某个分布的出现次数，V3
+	 * @param distribute
+	 * @return
+	 */
+	long countByDistributeV3(String distribute);
 
 }
